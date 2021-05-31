@@ -69,7 +69,7 @@ isUserLvl1 = (req, res, next) => {
         }
 
         for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "user_lvl_1") {
+          if (roles[i].name === "user_lvl_1" || roles[i].name === "ROLE_USER_LVL_1") {
             next();
             return;
           }
@@ -82,9 +82,41 @@ isUserLvl1 = (req, res, next) => {
   });
 };
 
+isUserLvl2 = (req, res, next) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    Role.find(
+      {
+        _id: { $in: user.roles }
+      },
+      (err, roles) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === "user_lvl_2" || roles[i].name === "ROLE_USER_LVL_2") {
+            next();
+            return;
+          }
+        }
+
+        res.status(403).send({ message: "Require User Level 2 Role!" });
+        return;
+      }
+    );
+  });
+};
+
 const authJwt = {
   verifyToken,
   isAdmin,
-  isUserLvl1
+  isUserLvl1,
+  isUserLvl2,
 };
 module.exports = authJwt;

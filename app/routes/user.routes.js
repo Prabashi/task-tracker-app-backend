@@ -1,4 +1,5 @@
 const { authJwt } = require("../middleware");
+const dashboardController = require("../controllers/dashboard.controller");
 const controller = require("../controllers/user.controller");
 
 module.exports = function(app) {
@@ -11,18 +12,4 @@ module.exports = function(app) {
   });
 
   app.get("/all", controller.allAccess);
-
-  app.get("/dashboard", [authJwt.verifyToken], controller.dashboard);
-
-  app.get(
-    "/dashboard/add",
-    [authJwt.verifyToken, authJwt.isUserLvl1],
-    controller.addDashboard
-  );
-
-  app.get(
-    "/task/add",
-    [authJwt.verifyToken],
-    controller.addTask
-  );
 };
