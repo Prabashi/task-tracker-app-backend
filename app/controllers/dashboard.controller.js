@@ -67,7 +67,38 @@ exports.getDashboard = (req, res) => {
                     err.message || "Some error occurred while retrieving dashboard."
             })
         })
-}
+};
+
+exports.updateDashboard = (req, res) => {
+  let updatedData = req.body;
+
+  Dashboard.updateOne({_id: require('mongodb').ObjectId(req.params.id)}, {$set: updatedData})
+    .then(res.status(200).json({
+      statusCode: 200,
+      status: 'success'
+    }))
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Error occurred while updating the dashboard"
+      })
+    })
+};
+
+exports.deleteDashboard = (req, res) => {
+  // TODO: Remove tasks after Dashboard delete or disable deleting Dashboard until all the tasks of the dashboard is deleted. Find the most convenient way
+  Dashboard.deleteOne({_id: require('mongodb').ObjectId(req.params.id)})
+    .then(res.status(200).json({
+      statusCode: 200,
+      status: 'success'
+    }))
+    .catch(err => {
+      res.status(500).send({
+        message:
+        err.message || "Error occurred while deleting the dashboard"
+      })
+    })
+};
 
 // exports.setTasks = (dashboard, task) => {
 //     dashboard.update({

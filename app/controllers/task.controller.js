@@ -37,6 +37,20 @@ exports.addTask = (req, res) => {
     // Dashboard.setTasks(dashboard, task);
     // res.status(200).send("Add Task");
 };
+
+exports.getTask = (req, res) => {
+  Task.findOne({_id: require('mongodb').ObjectId(req.params.id)})
+  .then(data => {
+      res.send(data)
+  })
+  .catch(err => {
+      res.status(500).send({
+          message:
+              err.message || "Some error occurred while retrieving task."
+      })
+  })
+};
+
 exports.updateTask = (req, res) => {
   let updatedTask = req.body;
 
@@ -52,6 +66,21 @@ exports.updateTask = (req, res) => {
           message: err.message || "Some error occurred while retrieving tasks of the dashboard."
       })
     });
+};
+
+exports.deleteTask = (req, res) => {
+  Task.deleteOne({_id: require('mongodb').ObjectId(req.params.id)})
+    .then(res.status(200).json({
+      statusCode: 200,
+      status: 'success'
+    }))
+    .catch(err => {
+      res.status(500).send({
+        message:
+        err.message || "Error occurred while deleting the task"
+      })
+    })
+};
   // Task.find({id: req.params.id})
   // .then(
     
@@ -65,4 +94,3 @@ exports.updateTask = (req, res) => {
   //           err.message || "Some error occurred while retrieving tasks of the dashboard."
   //     });
   // })
-    };

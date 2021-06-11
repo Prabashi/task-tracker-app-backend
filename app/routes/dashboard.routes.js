@@ -29,4 +29,16 @@ module.exports = function(app) {
     [authJwt.verifyToken],
     dashboardController.getDashboard
   );
+
+  app.put(
+    "/dashboard/:id/edit",
+    [authJwt.verifyToken],
+    dashboardController.updateDashboard
+  );
+
+  app.delete(
+    "/dashboard/:id",
+    [authJwt.verifyToken],
+    dashboardController.deleteDashboard
+  )
 };

@@ -16,9 +16,21 @@ module.exports = function(app) {
     taskController.addTask
   );
 
+  app.get(
+    "/task/:id",
+    [authJwt.verifyToken],
+    taskController.getTask
+  );
+
   app.patch(
     "/task/:id/update",
     [authJwt.verifyToken],
     taskController.updateTask
-  )
+  );
+
+  app.delete(
+    "/task/:id",
+    [authJwt.verifyToken],
+    taskController.deleteTask
+  );
 };
